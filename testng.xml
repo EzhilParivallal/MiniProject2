@@ -13,7 +13,9 @@
       <class name="test.TC_003_AddContactTest"/>
       <class name="test.TC_003_AddContactTest"/>
       <class name="test.TC_004_EditContactTest"/>
-      <class name="test.TC_005_DeleteContactTest"/>    
+      <class name="test.TC_005_DeleteContactTest"/>   
+      <class name="test.TC_006_LogoutTest"/> 
+      <class name="test.TC_007_ContactDisplayTest"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

@@ -143,6 +143,30 @@ return this;
 		Thread.sleep(3000);
 		return new HomePage(driver);
 	}
+	public void ValidateDisplaySorting() {
+		// TODO Auto-generated method stub
+		WebElement table = driver.findElement(By.id("myTable"));
+		List<WebElement> rows = table.findElements(By.xpath("//tr"));
+		List<WebElement> cols = table.findElements(By.xpath("//th"));
+		int row_size = rows.size();
+		int col_size = cols.size();
+		String [] lastName = new String[row_size-1];
+		//Thread.sleep(10000);
+		for(int i=1;i<row_size;i++) {
+				WebElement cell = table.findElement(By.xpath("//tr["+i+"]//td[2]"));
+				String cell_val = cell.getText();
+				String[] last=cell_val.split(" ");
+				lastName[i-1]=last[1];
+				//System.out.println(lastName[i-1]);
+		}
+		Boolean sorting = true;
+		for (int i = 1; i < lastName.length; i++) {
+            if (lastName[i - 1].compareTo(lastName[i]) > 0) {
+              sorting = false;
+            }
+        }
+		Assert.assertTrue(sorting.booleanValue()==true);
+	}
 	
 
 }

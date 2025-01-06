@@ -8,28 +8,17 @@
   </listeners>
   <test thread-count="5" name="Test(failed)">
     <classes>
-      <class name="test.TC_005_DeleteContactTest">
+      <class name="test.TC_007_ContactDisplayTest">
         <methods>
-          <include name="DeleteContactTest" invocation-numbers="0"/>
-          <include name="setup"/>
           <include name="testDetails"/>
           <include name="reportInitialization"/>
           <include name="reportClose"/>
-          <include name="browserClose"/>
-          <include name="launchAndLoadURL"/>
-        </methods>
-      </class> <!-- test.TC_005_DeleteContactTest -->
-      <class name="test.TC_004_EditContactTest">
-        <methods>
-          <include name="EditContactTest" invocation-numbers="0"/>
-          <include name="testDetails"/>
-          <include name="reportInitialization"/>
+          <include name="ContactDisplayTest"/>
           <include name="setup"/>
-          <include name="reportClose"/>
           <include name="browserClose"/>
           <include name="launchAndLoadURL"/>
         </methods>
-      </class> <!-- test.TC_004_EditContactTest -->
+      </class> <!-- test.TC_007_ContactDisplayTest -->
     </classes>
   </test> <!-- Test(failed) -->
 </suite> <!-- Failed suite [Suite] -->
