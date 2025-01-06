@@ -8,10 +8,12 @@
 <parameter name="browser" value="Chrome"></parameter>
   <test thread-count="5" name="Test">
     <classes>
-      <class name="test.TC_001_ValidSignUpTest"/>
-      <class name="test.TC_002_InvalidSignUp"/>
-      <class name="test.TC_003_LoginvalidTest"/>
-      <class name="test.TC_004_LogininvalidTest"/>
+      <class name="test.TC_001_SignUpTest"/>
+      <class name="test.TC_002_LoginTest"/>
+      <class name="test.TC_003_AddContactTest"/>
+      <class name="test.TC_003_AddContactTest"/>
+      <class name="test.TC_004_EditContactTest"/>
+      <class name="test.TC_005_DeleteContactTest"/>    
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

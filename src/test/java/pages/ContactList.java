@@ -13,57 +13,131 @@ public class ContactList extends ProjectSpecificationMethods {
 	public ContactList(WebDriver driver) {
 		this.driver = driver;
 	}
-	public ContactList ValidateResult(String testcase,String Func) {
+	public ContactList ValidateSignUp(String testcase,String errorMessage) {
 		String actual = driver.getTitle();
 		//System.out.println(title);
-		String expected = "My Contacts";
-	if (testcase.equals("positive")) {
-		if(Func.equals("SignUp")) {
-		  Assert.assertEquals(actual, expected);
-		  }
-		else if(Func.equals("LogIn")) {
-			Assert.assertEquals(actual, expected);
-		  }
-	}
-	else if(testcase.equals("negative")) {
-		if(Func.equals("LogIn")) {
-			Assert.assertTrue(driver.findElement(By.xpath("//span[text()='Incorrect username or password']")) != null);
-		}
-		if(Func.equals("SignUp")) {
-			Assert.assertTrue(driver.findElement(By.xpath("//span[text()='Email address is already in use']"))!=null);
-		}
-	}
+		String expected = errorMessage;
+		Assert.assertEquals(actual, expected);
 		return this;
 	}
-	public ContactList AddContactClick() throws InterruptedException {
+	public ContactList ValidateLogIn(String testCase,String errorMessage) {
+		String actual = driver.getTitle();
+		//System.out.println(title);
+		String expected = errorMessage;
+		Assert.assertEquals(actual, expected);
+		return this;
+	}
+	
+	public AddContactPage AddContactClick() throws InterruptedException {
 		driver.findElement(By.id("add-contact")).click();
 		Thread.sleep(3000);
-		return this;
+		return new AddContactPage(driver);
 	}
-	public ContactList DeleteContact(String del_contact) throws InterruptedException {
+	public ContactList ValidateContact(String firstNm,String lastNm,String dob,String email,String phone,String StAdd1,String StAdd2,String city,String stProvince,String post,String country,String testCase,String errorMessage) throws InterruptedException {
 		WebElement table = driver.findElement(By.id("myTable"));
-		//WebElement row = table.findElement(By.xpath("//tr[contains(@class, ‘contactTableBodyRow’)]")); 
 		List<WebElement> rows = table.findElements(By.xpath("//tr"));
 		List<WebElement> cols = table.findElements(By.xpath("//th"));
 		int row_size = rows.size();
 		int col_size = cols.size();
-		System.out.println(row_size+" "+col_size);
-		System.out.println(driver.findElement(By.xpath("//table[@id='myTable']/tbody//tr[1]//td[1]")).getText());
-		//td[normalize-space()='Ezhil Parivallal']
-		table.findElement(By.xpath("//tr[1]//td[1]")).click();
-		driver.findElement(By.id("delete")).click();
+		String contact=firstNm+" "+lastNm;
+		String cityProvincePost = null,Address = null;
+		
+		//Expected values
+		if((StAdd1.isBlank()==false)&&(StAdd2.isBlank()==false)){
+		    Address=StAdd1+" "+StAdd2;}
+		else if((StAdd1.isBlank()==false)&&(StAdd2.isBlank()==true)) {
+			Address=StAdd1;
+		}
+		else if((StAdd1.isBlank()==true)&&(StAdd2.isBlank()==false)) {
+			Address=StAdd2;
+		}
+		//-----------------------
+		if (city.isBlank()==false) {
+			cityProvincePost=city;
+		}
+		if(stProvince.isBlank()==false) {
+			if (cityProvincePost==null) {
+				cityProvincePost=stProvince;
+			}
+			else {
+				cityProvincePost=cityProvincePost+" "+stProvince;
+			}
+		}
+		if(post.isBlank()==false) {
+			if (cityProvincePost==null) {
+				cityProvincePost=post;
+			}
+			else {
+				cityProvincePost=cityProvincePost+" "+post;
+			}
+		}
+		//getting actual values
+		String actFirstNm = null,actLastNm = null,actDOB = null,actEmail = null,actPhone = null,actStAdd = null,actCityProvincePost = null,actCountry = null;
+		//Thread.sleep(10000);
 		for(int i=1;i<row_size;i++) {
-				WebElement cell = table.findElement(By.xpath("//tr["+i+"]//td[1]"));
+				WebElement cell = table.findElement(By.xpath("//tr["+i+"]//td[2]"));
 				String cell_val = cell.getText();
-				System.out.println(i+" "+table.findElement(By.xpath("//tr["+i+"]//td[1]")).getText());
-				if(cell_val.equals(del_contact)) {
-					cell.click();
-					Thread.sleep(3000);
-					driver.findElement(By.id("delete")).click();
+				if(cell_val.equals(contact)) {
+					//cell.click();
+					actFirstNm=firstNm;
+					actLastNm=lastNm;
+					actDOB=table.findElement(By.xpath("//tr["+i+"]//td[3]")).getText();
+					actEmail=table.findElement(By.xpath("//tr["+i+"]//td[4]")).getText();
+					actPhone=table.findElement(By.xpath("//tr["+i+"]//td[5]")).getText();
+					actStAdd=table.findElement(By.xpath("//tr["+i+"]//td[6]")).getText();
+					actCityProvincePost=table.findElement(By.xpath("//tr["+i+"]//td[7]")).getText();
+					actCountry=table.findElement(By.xpath("//tr["+i+"]//td[8]")).getText();
+					Thread.sleep(5000);
+					//driver.findElement(By.id("delete")).click();
 				}
 		}
-		return this;
+		//validation of results
+		if(testCase.equals("positive")) {
+	    	Assert.assertEquals(actFirstNm,firstNm);
+	    	Assert.assertEquals(actLastNm,lastNm);
+	    	if(dob.isBlank()==false) {
+	    	Assert.assertEquals(actDOB,dob);
+	    	}
+	    	if(email.isBlank()==false) {
+	    	Assert.assertEquals(actEmail,email.toLowerCase());
+	    	}    	
+	    	if(phone.isBlank()==false) {
+	    	Assert.assertEquals(actPhone,phone);
+	    	}
+	    	if((StAdd1.isBlank()==false)||(StAdd2.isBlank()==false)) {
+	    	Assert.assertEquals(actStAdd,Address);
+	    	}
+	    	if((city.isBlank()==false)||(stProvince.isBlank()==false)||(post.isBlank()==false)) {
+	    	Assert.assertEquals(actCityProvincePost,cityProvincePost);
+	    	}
+	    	if(country.isBlank()==false) {
+	    	Assert.assertEquals(actCountry,country);
+	    	}
+		}
+	
+return this;
 	}
+	
+	public ContactDetails SelectContact(String firstNm,String lastNm,String testCase,String errorMessage) throws InterruptedException {
+		WebElement table = driver.findElement(By.id("myTable"));
+		List<WebElement> rows = table.findElements(By.xpath("//tr"));
+		List<WebElement> cols = table.findElements(By.xpath("//th"));
+		int row_size = rows.size();
+		int col_size = cols.size();
+		String contact=firstNm+" "+lastNm;
+		//Thread.sleep(10000);
+		for(int i=1;i<row_size;i++) {
+				WebElement cell = table.findElement(By.xpath("//tr["+i+"]//td[2]"));
+				String cell_val = cell.getText();
+				if(cell_val.equals(contact)) {
+					cell.click();
+					break;
+					//driver.findElement(By.id("delete")).click();
+				}
+		}
+		return new ContactDetails(driver);
+	}
+
 	public HomePage LogoutClick() throws InterruptedException {
 		driver.findElement(By.id("logout")).click();
 		Thread.sleep(3000);

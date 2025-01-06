@@ -7,10 +7,15 @@ import java.time.Duration;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.BeforeMethod;
 
 import com.aventstack.extentreports.ExtentReports;
@@ -22,10 +27,13 @@ public class UtilityClass {
 	public static ExtentReports extent;
 	public static ExtentTest test;
 	public String testName, testDescription, testCategory,testAuthor;
+	public String sheetName;
 	
 	 public void browserLaunch(String url,String browser) {
 		 if (browser.equals("Chrome")) {
-		 driver = new ChromeDriver();
+			 ChromeOptions options = new ChromeOptions();
+			 options.addArguments("--disable-notifications");
+		     driver = new ChromeDriver(options);
 		 }
 		 driver.get(url);
 		 driver.manage().window().maximize();
@@ -47,4 +55,34 @@ public class UtilityClass {
 		 FileUtils.copyFile(src, dest);
 		 return path;
 	 }
+	 public static String[][] readExcel(String sheetName) throws IOException {
+			
+			XSSFWorkbook book = new XSSFWorkbook("C:\\Users\\ezhil\\OneDrive\\Desktop\\TestData_Mini2.xlsx");
+			
+			XSSFSheet sheet = book.getSheet(sheetName);	
+			
+			int rowCount = sheet.getLastRowNum();
+			
+			int columnCount = sheet.getRow(0).getLastCellNum();
+		
+			String[][] data = new String[rowCount][columnCount];
+			
+			for(int i =1 ; i <= rowCount; i++) {
+				
+				XSSFRow row = sheet.getRow(i);
+				
+				for(int j =0 ; j<columnCount; j++) {
+					
+					XSSFCell cell = row.getCell(j);
+					
+					data[i-1][j] = cell.getStringCellValue();
+					
+				}
+
+			}
+		
+			book.close();	
+			return data;
+}
+
 }
