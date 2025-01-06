@@ -33,6 +33,7 @@ public class TC_004_EditContactTest extends ProjectSpecificationMethods {
 		String[] arr1=obj1.SelectContact(firstNm,lastNm,testCase,errorMessage)
 		.FetchContact();
 		ContactDetails obj2=new ContactDetails(driver);
+		if(testCase.equals("negative")) {
 		obj2.editContact()
 		.FirstName(firstNm)
 		.LastName(lastNm)
@@ -45,8 +46,25 @@ public class TC_004_EditContactTest extends ProjectSpecificationMethods {
 		.StateProvince(stProvince)
 		.PostalCode(post)
 		.Country(country)
-		.ButtonSubmit(testCase,errorMessage)
-		.ValidateEditContact(firstNm, lastNm, dob, email, phone, StAdd1, StAdd2, city, stProvince, post, country, testCase, errorMessage, arr1);
-	}
+		.ButtonSubmit(testCase,errorMessage);
+		}
+		else {
+			obj2.editContact()
+			.FirstName(firstNm)
+			.LastName(lastNm)
+			.DOB(dob)
+			.Email(email)
+			.Phone(phone)
+			.StreetAdrs1(StAdd1)
+			.StreetAdrs2(StAdd2)
+			.City(city)
+			.StateProvince(stProvince)
+			.PostalCode(post)
+			.Country(country)
+			.ButtonSubmit(testCase,errorMessage)
+			.ValidateEditContact(firstNm, lastNm, dob, email, phone, StAdd1, StAdd2, city, stProvince, post, country, testCase, errorMessage, arr1);
+		
+		}
+		}
 
 }
